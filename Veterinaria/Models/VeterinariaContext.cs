@@ -29,9 +29,10 @@ public partial class VeterinariaContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=veterinaria.cupn8kflri4e.us-east-1.rds.amazonaws.com; Database=veterinaria; User Id=admin; Password=VeterinariaDPWA2023; MultipleActiveResultSets=true; Trusted_Connection=False; Encrypt=False;");
+		//=> optionsBuilder.UseSqlServer("Server=DESKTOP-SNN1NNR; Database=Veterinaria; Trusted_Connection=True; Encrypt=False");
+	=> optionsBuilder.UseSqlServer("Server=veterinaria.cupn8kflri4e.us-east-1.rds.amazonaws.com; Database=veterinaria; User Id=admin; Password=VeterinariaDPWA2023; MultipleActiveResultSets=true; Trusted_Connection=False; Encrypt=False;");
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cita>(entity =>
         {

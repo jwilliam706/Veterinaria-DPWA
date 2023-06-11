@@ -6,7 +6,11 @@ namespace Veterinaria.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			return View();
         }
     }
 }

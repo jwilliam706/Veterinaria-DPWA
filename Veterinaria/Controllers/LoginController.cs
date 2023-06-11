@@ -7,14 +7,10 @@ namespace Veterinaria.Controllers
 	public class LoginController : Controller
 	{
 
-		private readonly VeterinariaContext _context;
+		 VeterinariaContext _context=new VeterinariaContext();
 
 		
 
-		public LoginController(VeterinariaContext context)
-		{
-			_context = context;
-		}
 		public IActionResult Index()
 		{
 

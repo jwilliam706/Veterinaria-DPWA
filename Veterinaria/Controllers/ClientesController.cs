@@ -10,21 +10,33 @@ namespace Veterinaria.Controllers
         VeterinariaContext contexto = new VeterinariaContext();
         public IActionResult Index()
         {
-            var clientes = contexto.Clientes.ToList();
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			var clientes = contexto.Clientes.ToList();
           
             return View(clientes);
         }
 
         public IActionResult Create()
         {
-            return View();
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,Nombre,Telefono,Sexo,Direccion")] Cliente cliente)
         {
-            if (ModelState.IsValid)
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			if (ModelState.IsValid)
             {
                 contexto.Add(cliente);
                 contexto.SaveChanges();
@@ -37,7 +49,11 @@ namespace Veterinaria.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if (id == null || contexto.Clientes == null)
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			if (id == null || contexto.Clientes == null)
             {
                 return NotFound();
             }
@@ -53,7 +69,11 @@ namespace Veterinaria.Controllers
         [HttpPost]
         public  IActionResult Edit(int id, [Bind("Id,Nombre,Telefono,Sexo,Direccion")] Cliente cliente)
         {
-            if (id != cliente.Id)
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			if (id != cliente.Id)
             {
                 return NotFound();
             }
@@ -83,7 +103,11 @@ namespace Veterinaria.Controllers
 
         public IActionResult Delete(int? id)
         {
-            if (id == null || contexto.Clientes == null)
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			if (id == null || contexto.Clientes == null)
             {
                 return NotFound();
             }
@@ -102,7 +126,11 @@ namespace Veterinaria.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            if (contexto.Clientes == null)
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			if (contexto.Clientes == null)
             {
                 return Problem("Entity set 'VeterinariaContext.Clientes'  is null.");
             }
