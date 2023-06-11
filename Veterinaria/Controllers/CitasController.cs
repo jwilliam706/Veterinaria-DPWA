@@ -15,10 +15,14 @@ namespace Veterinaria.Controllers
 
         public IActionResult Create()
         {
+            if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
             var mascotas = contexto.Mascotas.Include(mascota => mascota.Cliente).ToList();
             ViewBag.mascotas = mascotas;
             ViewBag.veterinarios = contexto.Veterinarios.ToList();
-            return View();
+			return View();
         }
 
         [HttpPost]
