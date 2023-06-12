@@ -1,0 +1,10 @@
+﻿<h3>Reporte de Citas por Fecha</h3>
+<form action="@Url.Action("GenerarReporteCita", "Reportes")" method="post">
+    <div class="col-sm-8">
+        <label>Fecha</label>
+        <input type="date" name="fecha" class="form-control"/>
+    </div>
+    <div class="col-sm-4">
+        <input type="submit" name="btnReporte" id="btnReporte" class="btn btn-success" value="Descargar" />
+    </div>
+</form>
