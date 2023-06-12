@@ -15,12 +15,20 @@ namespace Veterinaria.Controllers
 
         public IActionResult Index()
         {
-            return View();
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			return View();
         }
 
         public IActionResult Privacy()
         {
-            return View();
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
+			return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
