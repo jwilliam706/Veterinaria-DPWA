@@ -27,7 +27,7 @@ namespace Veterinaria.Controllers
 
             //devolever archivo pdf como resultado de archivo
             byte[] fileBytes = Convert.FromBase64String(reportReponse.ContentReport);
-            return File(fileBytes, "application/pdf", "ReporteCliente.pdf");
+            return File(fileBytes, "application/pdf", "ReporteCitas.pdf");
 
 
         }
