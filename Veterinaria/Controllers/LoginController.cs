@@ -13,8 +13,8 @@ namespace Veterinaria.Controllers
 
 		public IActionResult Index()
 		{
-
-			return View();
+            
+            return View();
 		}
 
 		[HttpPost]
@@ -30,14 +30,16 @@ namespace Veterinaria.Controllers
 			else if (user.Role == "Administrador")
 			{
 				HttpContext.Session.SetString("UserName", user.Usuario1);
-				ViewBag.sesion = HttpContext.Session.GetString("UserName");
+                HttpContext.Session.SetString("Role", user.Role);
+              
 				return RedirectToAction("Index", "Home");
 
 			}
 			else
 			{
 				HttpContext.Session.SetString("UserName", user.Usuario1);
-				ViewBag.sesion = HttpContext.Session.GetString("UserName");
+                HttpContext.Session.SetString("Role", user.Role);
+               
 				return RedirectToAction("Privacy", "Home");
 			}
 			

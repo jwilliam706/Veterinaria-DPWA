@@ -15,7 +15,11 @@ namespace Veterinaria.Controllers
 				return RedirectToAction("Index", "Login");
 			}
 			var clientes = contexto.Clientes.ToList();
-          
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            
             return View(clientes);
         }
 
@@ -25,7 +29,11 @@ namespace Veterinaria.Controllers
 			{
 				return RedirectToAction("Index", "Login");
 			}
-			return View();
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            return View();
         }
 
         [HttpPost]
@@ -42,6 +50,10 @@ namespace Veterinaria.Controllers
                 contexto.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(cliente);
         }
 
@@ -63,6 +75,10 @@ namespace Veterinaria.Controllers
             {
                 return NotFound();
             }
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(cliente);
         }
 
@@ -98,6 +114,10 @@ namespace Veterinaria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(cliente);
         }
 
@@ -118,7 +138,10 @@ namespace Veterinaria.Controllers
             {
                 return NotFound();
             }
-
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(cliente);
         }
 
@@ -139,7 +162,10 @@ namespace Veterinaria.Controllers
             {
                 contexto.Clientes.Remove(cliente);
             }
-
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             contexto.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -14,8 +14,11 @@ namespace Veterinaria.Controllers
 				return RedirectToAction("Index", "Login");
 			}
 			var mascotas = contexto.Mascotas.ToList();
-
-			return View(mascotas);
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            return View(mascotas);
 		}
 
 		public IActionResult Create()
@@ -25,6 +28,10 @@ namespace Veterinaria.Controllers
 				return RedirectToAction("Index", "Login");
 			}
             ViewBag.Clientes = contexto.Clientes.ToList();
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View();
 		}
 
@@ -42,7 +49,11 @@ namespace Veterinaria.Controllers
 				contexto.SaveChanges();
 				return RedirectToAction(nameof(Index));
 			}
-			return View(mascota);
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            return View(mascota);
 		}
 
 
@@ -64,7 +75,11 @@ namespace Veterinaria.Controllers
 			{
 				return NotFound();
 			}
-			return View(mascota);
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            return View(mascota);
 		}
 
 		[HttpPost]
@@ -99,7 +114,11 @@ namespace Veterinaria.Controllers
 				}
 				return RedirectToAction(nameof(Index));
 			}
-			return View(mascota);
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            return View(mascota);
 		}
 
 		public IActionResult Delete(int? id)
@@ -119,8 +138,11 @@ namespace Veterinaria.Controllers
 			{
 				return NotFound();
 			}
-
-			return View(mascota);
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            return View(mascota);
 		}
 
 		[HttpPost, ActionName("Delete")]
@@ -142,7 +164,11 @@ namespace Veterinaria.Controllers
 			}
 
 			contexto.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            return RedirectToAction(nameof(Index));
 		}
 
 

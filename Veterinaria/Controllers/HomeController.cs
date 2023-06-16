@@ -1,16 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using Veterinaria.Models;
 
 namespace Veterinaria.Controllers
 {
+    
     public class HomeController : Controller
     {
+       
         private readonly ILogger<HomeController> _logger;
 
+        VeterinariaContext _context=new VeterinariaContext();
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+           
         }
 
         public IActionResult Index()
@@ -19,7 +24,13 @@ namespace Veterinaria.Controllers
 			{
 				return RedirectToAction("Index", "Login");
 			}
-			return View();
+            
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+            
+            return View();
         }
 
         public IActionResult Privacy()
@@ -28,7 +39,12 @@ namespace Veterinaria.Controllers
 			{
 				return RedirectToAction("Index", "Login");
 			}
-			return View();
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
+
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

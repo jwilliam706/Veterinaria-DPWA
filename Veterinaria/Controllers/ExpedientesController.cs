@@ -4,31 +4,32 @@ using Veterinaria.Models;
 
 namespace Veterinaria.Controllers
 {
-    public class VeterinariosController : Controller
+    public class ExpedientesController : Controller
     {
-
         VeterinariaContext contexto = new VeterinariaContext();
         public IActionResult Index()
         {
-			if (HttpContext.Session.GetString("UserName") == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
-			var veterinarios = contexto.Veterinarios.ToList();
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            var expedientes = contexto.Expedientes.ToList();
             string username = HttpContext.Session.GetString("UserName");
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
             ViewBag.Username = username;
-            return View(veterinarios);
-           
+            return View(expedientes);
         }
 
         public IActionResult Create()
         {
-			if (HttpContext.Session.GetString("UserName") == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
+           
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            ViewBag.Mascotas = contexto.Mascotas.ToList();
+            ViewBag.Citas = contexto.Citas.ToList();
             string username = HttpContext.Session.GetString("UserName");
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
@@ -38,15 +39,20 @@ namespace Veterinaria.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind("Id,Nombre,Telefono,Sexo,Direccion")] Veterinario veterinario)
+        public IActionResult Create( [Bind("Id,MascotaId,CitaId,Diagnostico,Recetas")] Expediente expediente)
         {
-			if (HttpContext.Session.GetString("UserName") == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
-			if (ModelState.IsValid)
+            if (HttpContext.Session.GetString("UserName") == null)
             {
-                contexto.Add(veterinario);
+                return RedirectToAction("Index", "Login");
+            }
+
+            
+        
+            if (ModelState.IsValid)
+            {
+
+                
+                contexto.Add(expediente);
                 contexto.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
@@ -54,22 +60,26 @@ namespace Veterinaria.Controllers
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
             ViewBag.Username = username;
-            return View(veterinario);
+            return View(expediente);
         }
 
-        public  IActionResult Edit(int? id)
+
+
+        public IActionResult Edit(int? id)
         {
-			if (HttpContext.Session.GetString("UserName") == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
-			if (id == null || contexto.Veterinarios == null)
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            ViewBag.Citas = contexto.Citas.ToList();
+            ViewBag.Mascotas = contexto.Mascotas.ToList();
+            if (id == null || contexto.Expedientes == null)
             {
                 return NotFound();
             }
 
-            var veterinario = contexto.Veterinarios.Find(id);
-            if (veterinario == null)
+            var expediente = contexto.Expedientes.Find(id);
+            if (expediente == null)
             {
                 return NotFound();
             }
@@ -77,19 +87,17 @@ namespace Veterinaria.Controllers
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
             ViewBag.Username = username;
-            return View(veterinario);
-        
-        
+            return View(expediente);
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, [Bind("Id,Nombre,Telefono,Sexo,Direccion")] Veterinario veterinario)
+        public IActionResult Edit(int id, [Bind("Id,MascotaId,CitaId,Diagnostico,Recetas")] Expediente expediente)
         {
-			if (HttpContext.Session.GetString("UserName") == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
-			if (id != veterinario.Id)
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            if (id != expediente.Id)
             {
                 return NotFound();
             }
@@ -98,12 +106,12 @@ namespace Veterinaria.Controllers
             {
                 try
                 {
-                    contexto.Update(veterinario);
+                    contexto.Update(expediente);
                     contexto.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VeterinarioExists(veterinario.Id))
+                    if (!ExpedienteExists(expediente.Id))
                     {
                         return NotFound();
                     }
@@ -118,23 +126,23 @@ namespace Veterinaria.Controllers
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
             ViewBag.Username = username;
-            return View(veterinario);
+            return View(expediente);
         }
 
         public IActionResult Delete(int? id)
         {
-			if (HttpContext.Session.GetString("UserName") == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
-			if (id == null || contexto.Veterinarios == null)
+            if (HttpContext.Session.GetString("UserName") == null)
+            {
+                return RedirectToAction("Index", "Login");
+            }
+            if (id == null || contexto.Expedientes == null)
             {
                 return NotFound();
             }
 
-            var veterinario = contexto.Veterinarios
+            var expediente = contexto.Expedientes
                 .FirstOrDefault(m => m.Id == id);
-            if (veterinario == null)
+            if (expediente == null)
             {
                 return NotFound();
             }
@@ -142,27 +150,28 @@ namespace Veterinaria.Controllers
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
             ViewBag.Username = username;
-            return View(veterinario);
+            return View(expediente);
         }
 
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-			if (HttpContext.Session.GetString("UserName") == null)
-			{
-				return RedirectToAction("Index", "Login");
-			}
-			if (contexto.Veterinarios == null)
+            if (HttpContext.Session.GetString("UserName") == null)
             {
-                return Problem("Entity set 'VeterinariaContext.Veterinarios'  is null.");
+                return RedirectToAction("Index", "Login");
             }
-            var veterinario = contexto.Veterinarios.Find(id);
-            if (veterinario != null)
+            if (contexto.Expedientes == null)
             {
-                contexto.Veterinarios.Remove(veterinario);
+                return Problem("Entity set 'VeterinariaContext.Mascotas'  is null.");
+            }
+            var expediente = contexto.Expedientes.Find(id);
+            if (expediente != null)
+            {
+                contexto.Expedientes.Remove(expediente);
             }
 
-            contexto.SaveChanges();
+            contexto.SaveChangesAsync();
             string username = HttpContext.Session.GetString("UserName");
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
@@ -171,10 +180,10 @@ namespace Veterinaria.Controllers
         }
 
 
-        private bool VeterinarioExists(int id)
-        {
-            return (contexto.Veterinarios?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
 
+        private bool ExpedienteExists(int id)
+        {
+            return (contexto.Expedientes?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Diagnostics;
 using System.Net.Sockets;
 using Veterinaria.Models;
@@ -10,6 +12,7 @@ namespace Veterinaria.Controllers
     public class UsuariosController : Controller
     {
         VeterinariaContext contexto = new VeterinariaContext();
+       
         public IActionResult Index()
         {
             if (HttpContext.Session.GetString("UserName") == null)
@@ -17,8 +20,12 @@ namespace Veterinaria.Controllers
                 return RedirectToAction("Index", "Login");
             }
             var usuarios = contexto.Usuarios.ToList();
-
+            
             return View(usuarios);
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
         }
 
         public IActionResult Create()
@@ -27,6 +34,10 @@ namespace Veterinaria.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View();
         }
 
@@ -44,6 +55,10 @@ namespace Veterinaria.Controllers
                 contexto.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(usuario);
         }
 
@@ -65,6 +80,10 @@ namespace Veterinaria.Controllers
             {
                 return NotFound();
             }
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(usuario);
         }
 
@@ -100,6 +119,10 @@ namespace Veterinaria.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(usuario);
         }
 
@@ -120,7 +143,10 @@ namespace Veterinaria.Controllers
             {
                 return NotFound();
             }
-
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             return View(usuario);
         }
 
@@ -141,7 +167,10 @@ namespace Veterinaria.Controllers
             {
                 contexto.Usuarios.Remove(usuario);
             }
-
+            string username = HttpContext.Session.GetString("UserName");
+            string role = HttpContext.Session.GetString("Role");
+            ViewBag.Role = role;
+            ViewBag.Username = username;
             contexto.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
