@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Veterinaria.Models;
 
@@ -7,7 +8,10 @@ public partial class Cita
 {
     public int Id { get; set; }
 
+    
     public DateTime? Fecha { get; set; }
+
+    public TimeSpan Hora { get; set; }
 
     public int? MascotaId { get; set; }
 
