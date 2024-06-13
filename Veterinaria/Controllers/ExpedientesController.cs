@@ -1,27 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Veterinaria.Models;
+using Veterinaria.Utils;
 
 namespace Veterinaria.Controllers
 {
     public class ExpedientesController : Controller
     {
         VeterinariaContext contexto = new VeterinariaContext();
-        public IActionResult Index()
-        {
-            if (HttpContext.Session.GetString("UserName") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            var expedientes = contexto.Expedientes.ToList();
-            string username = HttpContext.Session.GetString("UserName");
-            string role = HttpContext.Session.GetString("Role");
-            ViewBag.Role = role;
-            ViewBag.Username = username;
-            return View(expedientes);
-        }
+		public IActionResult Index()
+		{
+			if (HttpContext.Session.GetString("UserName") == null)
+			{
+				return RedirectToAction("Index", "Login");
+			}
 
-        public IActionResult Create()
+			var expedientes = contexto.Expedientes.ToList();
+
+			expedientes.ForEach(expediente => {
+				expediente.Diagnostico = CryptoHelper.DecryptString(expediente.Diagnostico);
+				expediente.Recetas = CryptoHelper.DecryptString(expediente.Recetas);
+			});
+
+			string username = HttpContext.Session.GetString("UserName");
+			string role = HttpContext.Session.GetString("Role");
+			ViewBag.Role = role;
+			ViewBag.Username = username;
+
+			return View(expedientes);
+		}
+
+
+		public IActionResult Create()
         {
            
             if (HttpContext.Session.GetString("UserName") == null)
@@ -45,17 +55,16 @@ namespace Veterinaria.Controllers
             {
                 return RedirectToAction("Index", "Login");
             }
-
-            
         
             if (ModelState.IsValid)
             {
+				expediente.Diagnostico = CryptoHelper.EncryptString(expediente.Diagnostico);
+				expediente.Recetas = CryptoHelper.EncryptString(expediente.Recetas);
 
-                
-                contexto.Add(expediente);
-                contexto.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
+				contexto.Add(expediente);
+				contexto.SaveChanges();
+				return RedirectToAction(nameof(Index));
+			}
             string username = HttpContext.Session.GetString("UserName");
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
@@ -87,6 +96,10 @@ namespace Veterinaria.Controllers
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
             ViewBag.Username = username;
+
+			expediente.Diagnostico = CryptoHelper.DecryptString(expediente.Diagnostico);
+			expediente.Recetas = CryptoHelper.DecryptString(expediente.Recetas);
+			
             return View(expediente);
         }
 

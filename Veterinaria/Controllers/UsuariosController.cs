@@ -60,6 +60,7 @@ namespace Veterinaria.Controllers
             {
                 return NotFound();
             }
+
             string username = HttpContext.Session.GetString("UserName");
             string role = HttpContext.Session.GetString("Role");
             ViewBag.Role = role;
