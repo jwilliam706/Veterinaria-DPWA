@@ -1,15 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
-using System.Diagnostics;
-using System.Net.Sockets;
 using Veterinaria.Models;
+using BCrypt.Net;
 
 namespace Veterinaria.Controllers
 {
-    public class UsuariosController : Controller
+	public class UsuariosController : Controller
     {
         VeterinariaContext contexto = new VeterinariaContext();
        
@@ -28,43 +25,26 @@ namespace Veterinaria.Controllers
             ViewBag.Username = username;
         }
 
-        public IActionResult Create()
-        {
-            if (HttpContext.Session.GetString("UserName") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            string username = HttpContext.Session.GetString("UserName");
-            string role = HttpContext.Session.GetString("Role");
-            ViewBag.Role = role;
-            ViewBag.Username = username;
-            return View();
-        }
+		public IActionResult Create()
+		{
+			return View();
+		}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Usuario1,Password,Role")] Usuario usuario)
-        {
-            if (HttpContext.Session.GetString("UserName") == null)
-            {
-                return RedirectToAction("Index", "Login");
-            }
-            if (ModelState.IsValid)
-            {
-                contexto.Add(usuario);
-                contexto.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
-            string username = HttpContext.Session.GetString("UserName");
-            string role = HttpContext.Session.GetString("Role");
-            ViewBag.Role = role;
-            ViewBag.Username = username;
-            return View(usuario);
-        }
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Create([Bind("Id,Usuario1,Password,Role")] Usuario usuario)
+		{
+			if (ModelState.IsValid)
+			{
+				usuario.Password = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
+				contexto.Add(usuario);
+				contexto.SaveChanges();
+				return RedirectToAction(nameof(Index));
+			}
+			return View(usuario);
+		}
 
-
-
-        public IActionResult Edit(int? id)
+		public IActionResult Edit(int? id)
         {
             if (HttpContext.Session.GetString("UserName") == null)
             {
@@ -103,6 +83,7 @@ namespace Veterinaria.Controllers
             {
                 try
                 {
+                    usuario.Password = BCrypt.Net.BCrypt.HashPassword(usuario.Password);
                     contexto.Update(usuario);
                     contexto.SaveChanges();
                 }
@@ -174,8 +155,6 @@ namespace Veterinaria.Controllers
             contexto.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
-
 
         private bool UsuarioExists(int id)
         {
