@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 using Veterinaria.Models;
 
 namespace Veterinaria.Controllers
@@ -20,8 +20,8 @@ namespace Veterinaria.Controllers
 		[HttpPost]
 		public IActionResult Index(string Usuario1, string Password)
 		{
-			var user = _context.Usuarios.SingleOrDefault(u => u.Usuario1 == Usuario1 && u.Password == Password);
-			if (user == null)
+			var user = _context.Usuarios.SingleOrDefault(u => u.Usuario1 == Usuario1);
+			if (user == null || !BCrypt.Net.BCrypt.Verify(Password, user.Password))
 			{
 				ModelState.AddModelError("", "Invalid username or password");
 				ViewData["Error"] = "Usuario o contraseña incorrecta";

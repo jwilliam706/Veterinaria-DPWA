@@ -16,9 +16,9 @@ namespace Veterinaria.Controllers
 			var mascotas = contexto.Mascotas.ToList();
             string username = HttpContext.Session.GetString("UserName");
             string role = HttpContext.Session.GetString("Role");
-            ViewBag.Role = role;
-            ViewBag.Username = username;
-            return View(mascotas);
+			ViewBag.Role = role;
+			ViewBag.Username = username;
+			return View(mascotas);
 		}
 
 		public IActionResult Create()
